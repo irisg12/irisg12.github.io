@@ -73,7 +73,7 @@ function build_gear ( number_of_teeth  )
 }
 
 
-// gear parameter setup
+// gear parameter setup adjust to array or something
 
 number_of_teeth = 14 ; // number of teeth (typically the only parameter to change)
 // note: rest of parameters must be unchanged if you want gears to fit.
@@ -82,7 +82,7 @@ pressure_angle= 20; // in degrees, determines gear shape, range is 10 to 40 degr
 clearance=4; // freedom between two gear centers
 backlash=4; // freedom between two gear contact points
 axle_radius=20; // center hole radius in pixels
-pressure_angle = degrees_to_radians ( pressure_angle); // convet degrees to radians
+pressure_angle = degrees_to_radians ( pressure_angle); // convert degrees to radians
 
 // create svg image in webpage
 
@@ -95,10 +95,17 @@ svg_image.setAttribute("width", svg_width.toString() );
 
 // create polygon using pointlist
 
+//*** what does the polygon look like
 gear1 = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 gear1.setAttribute("stroke", "#000000");
 gear1.setAttribute("stroke-width", "4px");
 gear1.setAttribute("fill", "none");
+
+gear2 = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+gear2.setAttribute("stroke", "#000000");
+gear2.setAttribute("stroke-width", "4px");
+gear2.setAttribute("fill", "none");
+
 
 
 // create the axle circle in the center of the gear
@@ -122,21 +129,36 @@ axle2.setAttribute("fill", "none");
 // move the gear from [0,0] to [315,315] (center image)
 
 gear1.setAttribute("transform", "translate(315,315)");
+gear2.setAttribute("transform", "translate(315,120)");
 axle1.setAttribute("transform", "translate(315,315)");
 axle2.setAttribute("transform", "translate(315,315)");
 
 // add the new graphics to the document structure
 
 svg_image.appendChild(gear1);
+svg_image.appendChild(gear2);
 svg_image.appendChild(axle1);
 svg_image.appendChild(axle2);
 document.svg = document.body.appendChild( svg_image );
 
 // create a gear and copy points to the polygon gear1
-
 document.xy_array = build_gear( number_of_teeth );
 gear1.setAttribute("points", document.xy_array.toString() );
+document.xy_array2 = build_gear( 8 );
+gear2.setAttribute("points", document.xy_array2.toString() );
 
+let start;
+requestAnimationFrame(rotateGear);
+
+function rotateGear(timestamp) {
+  if (start === undefined) {
+    start = timestamp;
+  }
+  const elapsed = timestamp - start;
+  angle = (elapsed* .01) % 360;
+  gear1.setAttribute("transform", `translate(315,315) rotate(${angle} 0 0)`);
+  requestAnimationFrame(rotateGear);
+}
 
 
 // two functions to respond to button clicks
