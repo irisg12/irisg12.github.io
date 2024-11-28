@@ -77,11 +77,11 @@ function build_gear ( number_of_teeth  )
 
 number_of_teeth = 14 ; // number of teeth (typically the only parameter to change)
 // note: rest of parameters must be unchanged if you want gears to fit.
-mm_per_tooth = 9*2*pi; // pixel size of one gear tooth (even though it says millimeters, it's pixels) must be same for two gears to fit each other
+mm_per_tooth = 6*2*pi; // pixel size of one gear tooth (even though it says millimeters, it's pixels) must be same for two gears to fit each other
 pressure_angle= 20; // in degrees, determines gear shape, range is 10 to 40 degrees, most common is 20 degrees
 clearance=4; // freedom between two gear centers
 backlash=4; // freedom between two gear contact points
-axle_radius=20; // center hole radius in pixels
+axle_radius=30; // center hole radius in pixels
 pressure_angle = degrees_to_radians ( pressure_angle); // convert degrees to radians
 
 // create svg image in webpage
@@ -106,8 +106,6 @@ gear2.setAttribute("stroke", "#000000");
 gear2.setAttribute("stroke-width", "4px");
 gear2.setAttribute("fill", "none");
 
-
-
 // create the axle circle in the center of the gear
 
 axle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -116,29 +114,21 @@ axle1.setAttribute("stroke", "#000000");
 axle1.setAttribute("stroke-width", "4px");
 axle1.setAttribute("fill", "none");
 
-
-// create a center point
-
-axle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-axle2.setAttribute("r", 1 );
-axle2.setAttribute("stroke", "#000000");
-axle2.setAttribute("stroke-width", "1px");
-axle2.setAttribute("fill", "none");
-
-
 // move the gear from [0,0] to [315,315] (center image)
-
-gear1.setAttribute("transform", "translate(315,315)");
-gear2.setAttribute("transform", "translate(315,120)");
-axle1.setAttribute("transform", "translate(315,315)");
-axle2.setAttribute("transform", "translate(315,315)");
+x1 = 315;
+y1 = x1;
+size1 = mm_per_tooth * (number_of_teeth) / pi / 2;
+size2 = mm_per_tooth * (8) / pi / 2
+x2 = 315 + size1 + size2;
+gear1.setAttribute("transform", `translate(${x1},${y1})`);
+gear2.setAttribute("transform", `translate(${x2},${x1})`);
+axle1.setAttribute("transform", `translate(${x1},${315})`);
 
 // add the new graphics to the document structure
 
 svg_image.appendChild(gear1);
 svg_image.appendChild(gear2);
 svg_image.appendChild(axle1);
-svg_image.appendChild(axle2);
 document.svg = document.body.appendChild( svg_image );
 
 // create a gear and copy points to the polygon gear1
@@ -155,8 +145,12 @@ function rotateGear(timestamp) {
     start = timestamp;
   }
   const elapsed = timestamp - start;
-  angle = (elapsed* .01) % 360;
+  angle = (elapsed* .03) % (360*10); // maybe change
+  omega1c = angle * size1/(size1+size2)/2;
+  x2 = (size1+size2)*Math.cos(omega1c*pi/180);
+  y2 = (size1+size2)*Math.sin(omega1c*pi/180);
   gear1.setAttribute("transform", `translate(315,315) rotate(${angle} 0 0)`);
+  gear2.setAttribute("transform", `translate(${x1+x2},${y1+y2}) rotate(${-(size1+size2)/size2*omega1c} 0 0)`);
   requestAnimationFrame(rotateGear);
 }
 
