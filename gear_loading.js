@@ -51,7 +51,7 @@ function build_gear ( number_of_teeth  )
   p  = mm_per_tooth * number_of_teeth / pi / 2;  // radius of pitch circle
   c  = p + mm_per_tooth / pi - clearance;        // radius of outer circle
   b  = p * Math.cos(pressure_angle);             // radius of base circle
-  r  = p-(c-p)-clearance;                        // radius of root circle
+  r  = 2+p-(c-p)-clearance;                        // radius of root circle
   t  = mm_per_tooth / 2-backlash / 2;            // tooth thickness at pitch circle
   k  = -iang(b, p) - t/2/p;                      // angle where involute meets base circle on side of tooth
 
@@ -72,7 +72,40 @@ function build_gear ( number_of_teeth  )
 
 }
 
+class Gear {
+  constructor(numTeeth) {
+    this.numTeeth = numTeeth;
+    this.x = x0;
+    this.y = y0;
+    this.angle = 0;
+    this.rad = mm_per_tooth * numTeeth / pi / 2;
 
+    this.img = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    this.img.setAttribute("stroke", "#000000");
+    this.img.setAttribute("stroke-width", "3px");
+    this.img.setAttribute("fill", "none"); // color based on size?
+
+    svg_image.appendChild(this.img);
+    document.xy_array = build_gear(this.numTeeth); // does this cause memory issues
+    this.img.setAttribute("points", document.xy_array.toString());
+  }
+}
+
+class Ring extends Gear {
+  constructor(numTeeth) {
+    super(numTeeth);
+    this.img_ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    this.img_ring.setAttribute("r", (this.rad + mm_per_tooth/1.5).toString()); // fix the sizing to be relative
+    this.img_ring.setAttribute("stroke", "#000000");
+    this.img_ring.setAttribute("stroke-width", "3px");
+    this.img_ring.setAttribute("fill", "none");
+    this.img_ring.setAttribute("transform", `translate(${this.x} ${this.y})`)
+
+    svg_image.appendChild(this.img_ring);
+  }
+}
+
+// organize ur program structure bro
 // gear parameter setup adjust to array or something
 
 number_of_teeth = 14 ; // number of teeth (typically the only parameter to change)
@@ -88,54 +121,35 @@ pressure_angle = degrees_to_radians ( pressure_angle); // convert degrees to rad
 
 svg_height = 630;
 svg_width = 630;
+x0 = svg_width/2;
+y0 = svg_height/2;
 
 svg_image = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 svg_image.setAttribute("height", svg_height.toString() );
 svg_image.setAttribute("width", svg_width.toString() );
 
-// create polygon using pointlist
 
-//*** what does the polygon look like
-gear1 = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-gear1.setAttribute("stroke", "#000000");
-gear1.setAttribute("stroke-width", "4px");
-gear1.setAttribute("fill", "none");
+trace_pt = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+trace_pt.setAttribute("r", 5 );
+trace_pt.setAttribute("stroke", "#FF0000");
+trace_pt.setAttribute("stroke-width", "3px");
+trace_pt.setAttribute("fill", "none");
 
-gear2 = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-gear2.setAttribute("stroke", "#000000");
-gear2.setAttribute("stroke-width", "4px");
-gear2.setAttribute("fill", "none");
-
-// create the axle circle in the center of the gear
-
-axle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-axle1.setAttribute("r", axle_radius.toString() );
-axle1.setAttribute("stroke", "#000000");
-axle1.setAttribute("stroke-width", "4px");
-axle1.setAttribute("fill", "none");
-
-// move the gear from [0,0] to [315,315] (center image)
-x1 = 315;
-y1 = x1;
-size1 = mm_per_tooth * (number_of_teeth) / pi / 2;
-size2 = mm_per_tooth * (8) / pi / 2
-x2 = 315 + size1 + size2;
-gear1.setAttribute("transform", `translate(${x1},${y1})`);
-gear2.setAttribute("transform", `translate(${x2},${x1})`);
-axle1.setAttribute("transform", `translate(${x1},${315})`);
-
-// add the new graphics to the document structure
-
-svg_image.appendChild(gear1);
-svg_image.appendChild(gear2);
-svg_image.appendChild(axle1);
+svg_image.appendChild(trace_pt);
 document.svg = document.body.appendChild( svg_image );
 
-// create a gear and copy points to the polygon gear1
-document.xy_array = build_gear( number_of_teeth );
-gear1.setAttribute("points", document.xy_array.toString() );
-document.xy_array2 = build_gear( 8 );
-gear2.setAttribute("points", document.xy_array2.toString() );
+//get some planetary OOP up in here
+
+g1 = new Gear(14);
+g1.x = 315;
+g1.y = 315;
+g1.img.setAttribute("transform", `translate(${g1.x},${g1.y}) rotate(${180/g1.numTeeth} 0 0)`);
+
+g2 = new Gear(14);
+g2.x = 315;
+g2.y = 315;
+
+r1 = new Ring(3*14);
 
 let start;
 requestAnimationFrame(rotateGear);
@@ -145,15 +159,18 @@ function rotateGear(timestamp) {
     start = timestamp;
   }
   const elapsed = timestamp - start;
-  angle = (elapsed* .03) % (360*10); // maybe change
-  omega1c = angle * size1/(size1+size2)/2;
-  x2 = (size1+size2)*Math.cos(omega1c*pi/180);
-  y2 = (size1+size2)*Math.sin(omega1c*pi/180);
-  gear1.setAttribute("transform", `translate(315,315) rotate(${angle} 0 0)`);
-  gear2.setAttribute("transform", `translate(${x1+x2},${y1+y2}) rotate(${-(size1+size2)/size2*omega1c} 0 0)`);
+  angle = (elapsed* .03); // maybe change
+  omega1c = angle * 3*g1.rad/(g1.rad+3*g1.rad);
+  g2.angle = (g1.rad+g2.rad)/g2.rad*omega1c;
+  g2.x = x0 + (g1.rad+g2.rad)*Math.cos(omega1c*pi/180);
+  g2.y = y0 + (g1.rad+g2.rad)*Math.sin(omega1c*pi/180);
+  x2p = (g1.rad+g2.rad*2)*Math.cos(omega1c*pi/180);
+  y2p = (g1.rad+g2.rad*2)*Math.sin(omega1c*pi/180);
+  r1.img.setAttribute("transform", `translate(315,315) rotate(${angle} 0 0)`);
+  g2.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
+  trace_pt.setAttribute("transform", `translate(${g2.x+g2.rad*1*Math.cos(g2.angle*pi/180)},${g2.y+g2.rad*1*Math.sin(g2.angle*pi/180)})`);
   requestAnimationFrame(rotateGear);
 }
-
 
 // two functions to respond to button clicks
 
