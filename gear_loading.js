@@ -78,7 +78,7 @@ class Gear {
     this.x = x0;
     this.y = y0;
     this.angle = 0;
-    this.rad = mm_per_tooth * numTeeth / pi / 2;
+    this.rad = mm_per_tooth * this.numTeeth / pi / 2;
 
     this.img = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
     this.img.setAttribute("stroke", "#000000");
@@ -108,9 +108,9 @@ class Ring extends Gear {
 // organize ur program structure bro
 // gear parameter setup adjust to array or something
 
-number_of_teeth = 14 ; // number of teeth (typically the only parameter to change)
+//number_of_teeth = 14 ; // number of teeth (typically the only parameter to change)
 // note: rest of parameters must be unchanged if you want gears to fit.
-mm_per_tooth = 6*2*pi; // pixel size of one gear tooth (even though it says millimeters, it's pixels) must be same for two gears to fit each other
+mm_per_tooth = 4*2*pi; // pixel size of one gear tooth (even though it says millimeters, it's pixels) must be same for two gears to fit each other
 pressure_angle= 20; // in degrees, determines gear shape, range is 10 to 40 degrees, most common is 20 degrees
 clearance=4; // freedom between two gear centers
 backlash=4; // freedom between two gear contact points
@@ -120,7 +120,7 @@ pressure_angle = degrees_to_radians ( pressure_angle); // convert degrees to rad
 // create svg image in webpage
 
 svg_height = 630;
-svg_width = 630;
+svg_width = 1260;
 x0 = svg_width/2;
 y0 = svg_height/2;
 
@@ -140,16 +140,20 @@ document.svg = document.body.appendChild( svg_image );
 
 //get some planetary OOP up in here
 
-g1 = new Gear(14);
-g1.x = 315;
-g1.y = 315;
-g1.img.setAttribute("transform", `translate(${g1.x},${g1.y}) rotate(${180/g1.numTeeth} 0 0)`);
+g1 = new Gear(30);
+g1.x = x0;
+g1.y = y0;
+g1.img.setAttribute("transform", `translate(${g1.x},${g1.y})`);
 
-g2 = new Gear(14);
-g2.x = 315;
-g2.y = 315;
+g2 = new Gear(15);
+g2.x = x0;
+g2.y = y0;
 
-r1 = new Ring(3*14);
+r1 = new Ring(g1.numTeeth+2*g2.numTeeth);
+r2 = new Ring(24);
+
+g2s = new Gear(24-9-9);
+g3 = new Gear(9);
 
 let start;
 requestAnimationFrame(rotateGear);
@@ -159,16 +163,25 @@ function rotateGear(timestamp) {
     start = timestamp;
   }
   const elapsed = timestamp - start;
-  angle = (elapsed* .03); // maybe change
-  omega1c = angle * 3*g1.rad/(g1.rad+3*g1.rad);
+  angle = (elapsed* .02); // maybe change
+  omega1c = angle * r1.rad/(g1.rad+r1.rad);
   g2.angle = (g1.rad+g2.rad)/g2.rad*omega1c;
   g2.x = x0 + (g1.rad+g2.rad)*Math.cos(omega1c*pi/180);
   g2.y = y0 + (g1.rad+g2.rad)*Math.sin(omega1c*pi/180);
   x2p = (g1.rad+g2.rad*2)*Math.cos(omega1c*pi/180);
   y2p = (g1.rad+g2.rad*2)*Math.sin(omega1c*pi/180);
-  r1.img.setAttribute("transform", `translate(315,315) rotate(${angle} 0 0)`);
+  r1.img.setAttribute("transform", `translate(${x0},${y0}) rotate(${angle} 0 0)`);
   g2.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
-  trace_pt.setAttribute("transform", `translate(${g2.x+g2.rad*1*Math.cos(g2.angle*pi/180)},${g2.y+g2.rad*1*Math.sin(g2.angle*pi/180)})`);
+  r2.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
+  r2.img_ring.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
+  g2s.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${omega1c} 0 0)`);
+  r2.angle = g2.angle;
+  omega2c = r2.numTeeth/(g2s.numTeeth+r2.numTeeth)*r2.angle + g2s.numTeeth/(g2s.numTeeth+r2.numTeeth)*omega1c;
+  g3.angle = (g2s.numTeeth+g3.numTeeth)/g3.numTeeth*omega2c - g2s.numTeeth/g3.numTeeth*omega1c;
+  g3.x = g2.x+g2.rad*1*Math.cos(omega2c*pi/180);
+  g3.y = g2.y+g2.rad*1*Math.sin(omega2c*pi/180);
+  g3.img.setAttribute("transform", `translate(${g3.x},${g3.y}) rotate(${g3.angle} 0 0)`);
+  trace_pt.setAttribute("transform", `translate(${g3.x+g3.rad*1*Math.cos(g3.angle*pi/180)},${g3.y+g3.rad*1*Math.sin(g3.angle*pi/180)})`);
   requestAnimationFrame(rotateGear);
 }
 
