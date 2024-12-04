@@ -66,7 +66,7 @@ function build_gear ( number_of_teeth  )
 
   // create every gear tooth by rotating the first tooth
 
-  for (var i=0; i<number_of_teeth; i++ ) answer = answer.concat (  rotate( points, -i*2*pi/number_of_teeth ) );
+  for (var i=0; i<number_of_teeth; i++ ) answer = answer.concat (  rotate( points, -i*2*pi/number_of_teeth - pi/2) );
 
   return answer; // returns an array of [x,y] points
 
@@ -100,7 +100,6 @@ class Ring extends Gear {
     this.img_ring.setAttribute("stroke-width", "3px");
     this.img_ring.setAttribute("fill", "none");
     this.img_ring.setAttribute("transform", `translate(${this.x} ${this.y})`)
-
     svg_image.appendChild(this.img_ring);
   }
 }
@@ -152,8 +151,8 @@ g2.y = y0;
 r1 = new Ring(g1.numTeeth+2*g2.numTeeth);
 r2 = new Ring(24);
 
-g2s = new Gear(24-9-9);
-g3 = new Gear(9);
+g3 = new Gear(8);
+g2s = new Gear(r2.numTeeth-2*g3.numTeeth);
 
 let start;
 requestAnimationFrame(rotateGear);
@@ -163,7 +162,7 @@ function rotateGear(timestamp) {
     start = timestamp;
   }
   const elapsed = timestamp - start;
-  angle = (elapsed* .02); // maybe change
+  angle = (elapsed* .03); // maybe change
   omega1c = angle * r1.rad/(g1.rad+r1.rad);
   g2.angle = (g1.rad+g2.rad)/g2.rad*omega1c;
   g2.x = x0 + (g1.rad+g2.rad)*Math.cos(omega1c*pi/180);
@@ -172,16 +171,20 @@ function rotateGear(timestamp) {
   y2p = (g1.rad+g2.rad*2)*Math.sin(omega1c*pi/180);
   r1.img.setAttribute("transform", `translate(${x0},${y0}) rotate(${angle} 0 0)`);
   g2.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
-  r2.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
-  r2.img_ring.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
-  g2s.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${omega1c} 0 0)`);
+  //r2.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
+  //r2.img_ring.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
+  g2s.angle = omega1c*1;
+  g2s.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2s.angle} 0 0)`);
   r2.angle = g2.angle;
-  omega2c = r2.numTeeth/(g2s.numTeeth+r2.numTeeth)*r2.angle + g2s.numTeeth/(g2s.numTeeth+r2.numTeeth)*omega1c;
-  g3.angle = (g2s.numTeeth+g3.numTeeth)/g3.numTeeth*omega2c - g2s.numTeeth/g3.numTeeth*omega1c;
-  g3.x = g2.x+g2.rad*1*Math.cos(omega2c*pi/180);
-  g3.y = g2.y+g2.rad*1*Math.sin(omega2c*pi/180);
+  omega2c = r2.numTeeth/(g2s.numTeeth+r2.numTeeth)*r2.angle + g2s.numTeeth/(g2s.numTeeth+r2.numTeeth)*g2s.angle;
+  g3.angle = (g2s.numTeeth+g3.numTeeth)/g3.numTeeth*omega2c - g2s.numTeeth/g3.numTeeth*g2s.angle;
+  //g3.x = g2.x+(g2s.rad+g3.rad)*Math.cos(omega2c*pi/180);
+  //g3.y = g2.y+(g2s.rad+g3.rad)*Math.sin(omega2c*pi/180);
+  g3.x = g2.x+(g2s.rad+g3.rad)*Math.cos(g2.angle*pi/180);
+  g3.y = g2.y+(g2s.rad+g3.rad)*Math.sin(g2.angle*pi/180);
+  g3.angle = g2.angle*5/3;
   g3.img.setAttribute("transform", `translate(${g3.x},${g3.y}) rotate(${g3.angle} 0 0)`);
-  trace_pt.setAttribute("transform", `translate(${g3.x+g3.rad*1*Math.cos(g3.angle*pi/180)},${g3.y+g3.rad*1*Math.sin(g3.angle*pi/180)})`);
+  trace_pt.setAttribute("transform", `translate(${g3.x+g3.rad*.75*Math.cos(g3.angle*pi/180)},${g3.y+g3.rad*.75*Math.sin(g3.angle*pi/180)})`);
   requestAnimationFrame(rotateGear);
 }
 
