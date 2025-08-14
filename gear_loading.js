@@ -72,6 +72,16 @@ function build_gear ( number_of_teeth  )
 
 }
 
+function drawCycloid() {
+  points = [360][2];
+  //g3.x+g3.rad*9/8*Math.cos(g3.angle*pi/180)
+  //g3.y+g3.rad*9/8*Math.sin(g3.angle*pi/180)
+  for (var i=0; i < 360; i++){
+    points[i] = [400+g3.rad*9/8*Math.cos(i*pi/180), 400+g3.rad*9/8*Math.sin(i*pi/180)];
+  }
+  return points;
+}
+
 class Gear {
   constructor(numTeeth) {
     this.numTeeth = numTeeth;
@@ -149,10 +159,20 @@ g2.x = x0;
 g2.y = y0;
 
 r1 = new Ring(g1.numTeeth+2*g2.numTeeth);
-r2 = new Ring(24);
+//r2 = new Ring(24);
 
 g3 = new Gear(8);
-g2s = new Gear(r2.numTeeth-2*g3.numTeeth);
+g2s = new Gear(8);
+
+//g4 = new Gear()
+
+cyc2 = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+cyc2.setAttribute("stroke", "#FF0000");
+cyc2.setAttribute("stroke-width", "3px");
+cyc2.setAttribute("fill", "none");
+svg_image.appendChild(cyc2);
+document.xy_array = drawCycloid(); // does this cause memory issues - uh so yes 
+ cyc2.setAttribute("points", document.xy_array.toString());
 
 let start;
 requestAnimationFrame(rotateGear);
@@ -175,16 +195,14 @@ function rotateGear(timestamp) {
   //r2.img_ring.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2.angle} 0 0)`);
   g2s.angle = omega1c*1;
   g2s.img.setAttribute("transform", `translate(${g2.x},${g2.y}) rotate(${g2s.angle} 0 0)`);
-  r2.angle = g2.angle;
-  omega2c = r2.numTeeth/(g2s.numTeeth+r2.numTeeth)*r2.angle + g2s.numTeeth/(g2s.numTeeth+r2.numTeeth)*g2s.angle;
-  g3.angle = (g2s.numTeeth+g3.numTeeth)/g3.numTeeth*omega2c - g2s.numTeeth/g3.numTeeth*g2s.angle;
-  //g3.x = g2.x+(g2s.rad+g3.rad)*Math.cos(omega2c*pi/180);
-  //g3.y = g2.y+(g2s.rad+g3.rad)*Math.sin(omega2c*pi/180);
+  //r2.angle = g2.angle;
+  //omega2c = r2.numTeeth/(g2s.numTeeth+r2.numTeeth)*r2.angle + g2s.numTeeth/(g2s.numTeeth+r2.numTeeth)*g2s.angle;
+  //g3.angle = (g2s.numTeeth+g3.numTeeth)/g3.numTeeth*omega2c - g2s.numTeeth/g3.numTeeth*g2s.angle;
   g3.x = g2.x+(g2s.rad+g3.rad)*Math.cos(g2.angle*pi/180);
   g3.y = g2.y+(g2s.rad+g3.rad)*Math.sin(g2.angle*pi/180);
   g3.angle = g2.angle*5/3;
   g3.img.setAttribute("transform", `translate(${g3.x},${g3.y}) rotate(${g3.angle} 0 0)`);
-  trace_pt.setAttribute("transform", `translate(${g3.x+g3.rad*.75*Math.cos(g3.angle*pi/180)},${g3.y+g3.rad*.75*Math.sin(g3.angle*pi/180)})`);
+  trace_pt.setAttribute("transform", `translate(${g3.x+g3.rad*9/8*Math.cos(g3.angle*pi/180)},${g3.y+g3.rad*9/8*Math.sin(g3.angle*pi/180)})`);
   requestAnimationFrame(rotateGear);
 }
 
