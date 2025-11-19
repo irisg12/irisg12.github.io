@@ -7,7 +7,7 @@ export default function Guestbook() {
       <h1> Iris's Guestbook</h1>
         <p> garden </p>
         <p>leave your name in my corner of the internet !</p>
-        <div>
+        <div className="room-container">
             <Link to="/about" class="nav-button">Back Inside</Link>
             <br/>
         </div>

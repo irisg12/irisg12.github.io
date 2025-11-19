@@ -6,7 +6,7 @@ export default function Projects() {
     <>
       <h1> projects </h1>
         <p>(engineering)</p>
-        <div class="room-container">
+        <div className="room-container">
             <Link to="/projects-fun" className="nav-button">&lt;</Link>
             <br />
             <Link to="/about" className="nav-button">&gt;</Link>

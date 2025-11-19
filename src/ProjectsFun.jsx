@@ -6,7 +6,7 @@ export default function Error() {
     <>
       <h1> Personal Projects (not engineering)</h1>
         <p> kitchen </p>
-        <div class="room-container">
+        <div className="room-container">
             <Link to="/pic-garden" className="nav-button">&lt;</Link>
             <br />
             <Link to="/about" className="nav-button">Leave? doesn't work yet</Link>
