@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import {useState, useEffect } from "react";
+import useImageDimensions from "./useImageDims";
 import './main.css';
 
 import sideRoom from "./assets/room_side.png";
@@ -18,30 +18,11 @@ const images = [
 ]
 
 export default function About() {
-  const [widths, setWidths] = useState({});
-  const [heights, setHeights] = useState({});
   const [curtainsOpen, setCurtains] = useState(false);
   const [rugFlipped, setRug] = useState(false);
   const SF = .042;
 
-  useEffect(() => {
-    const newWidths = {};
-    const newHeights = {};
-    let loadedCount = 0;
-    images.forEach(({id, src}) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        newWidths[id] = img.width
-        newHeights[id] = img.height;
-        loadedCount++;
-        if(loadedCount = images.length) {
-          setWidths(newWidths);
-          setHeights(newHeights);
-        }
-    };
-    });
-  },[]);
+  const { widths, heights } = useImageDimensions(images);
 
   const toggleCurtains = () => {
     setCurtains(!curtainsOpen);
