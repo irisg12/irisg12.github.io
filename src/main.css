@@ -4,8 +4,14 @@
   aspect-ratio: 16 / 9;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   outline: 1px solid;
   outline-color: #fff;
+
+  background-color: #fff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .nav-button {
@@ -15,4 +21,17 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.interactive {
+  position: absolute;
+  background-size: cover;
+  z-index: 3;
+  background-color: #fff0;
+  min-width: 0px;
+  min-height: 0px;
+}
+
+.interactive:focus {
+  outline: none;
 }
