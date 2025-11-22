@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react"
 import useImageDimensions from "./useImageDims";
 import './main.css';
 
@@ -20,6 +21,7 @@ const images = [
 export default function About() {
   const [curtainsOpen, setCurtains] = useState(false);
   const [rugFlipped, setRug] = useState(false);
+  const [seedsUp, setSeeds] = useState(false);
   const SF = .042;
 
   const { widths, heights } = useImageDimensions(images);
@@ -30,6 +32,10 @@ export default function About() {
 
   const toggleRug = () => {
     setRug(!rugFlipped);
+  }
+
+  const handleSeeds = () => {
+    if (!seedsUp) setSeeds(!seedsUp);
   }
 
   return (
@@ -60,7 +66,7 @@ export default function About() {
           backgroundImage: `url(${rugFlipped? rugUp: rug})`
         }}>
         </button>
-        {rugFlipped && <button className="interactive" onClick={toggleCurtains} 
+        {rugFlipped && !seedsUp && <button className="interactive" onClick={handleSeeds} 
         style={{
           width: `${widths["seeds"] * SF}%`,
           aspectRatio: widths["seeds"] / heights["seeds"],
