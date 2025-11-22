@@ -16,3 +16,9 @@ export default function About() {
     </>
   )
 }
+
+/* window/side (art & about) - window, garden door, music player, keyboard garden entrance 
+study (projs)- desk, lamp, 3d printer? tool workspace, door?
+kitchen (personal) - fridge (magnets), drawers, 
+living room (pics) - pic collage wall, chair, plant
+*/
