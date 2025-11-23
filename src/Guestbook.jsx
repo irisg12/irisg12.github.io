@@ -55,7 +55,12 @@ export default function Guestbook() {
       <h1> Iris's Guestbook</h1>
         <p> garden , leave your name in my corner of the internet !</p>
         <div className="room-container" style={{backgroundImage: `url(${garden})`}}>
-          <Link to="/about" className="interactive">Back Inside</Link>
+          <Link to="/about" className="interactive" title="Back inside"
+            style={{
+              width: "7%",
+              aspectRatio: ".19",
+              top: "30%"
+            }}></Link>
           <br/>
           <button className="interactive" onClick={toggleFlag} 
             style={{

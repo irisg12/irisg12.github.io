@@ -45,7 +45,13 @@ export default function About() {
       <div className="room-container" style={{backgroundImage: `url(${sideRoom})`}}>
         <Link to="/projects" className="nav-button">&lt;</Link>
         <br />
-        <Link to="/guest-garden" className="nav-button">Guestbook (garden)</Link>
+        <Link to="/guest-garden" className="interactive" title="Guestbook (garden)"
+          style={{
+            width: "17%",
+            aspectRatio: ".5",
+            left: "62%",
+            top: "18%"
+          }}></Link>
         <br />
         <Link to="/pic-garden" className="nav-button">&gt;</Link>
         <button className="interactive" onClick={toggleCurtains} 
