@@ -35,7 +35,7 @@ export default function About() {
   }
 
   const handleSeeds = () => {
-    if (!seedsUp) setSeeds(!seedsUp);
+    setSeeds(true);
   }
 
   return (

@@ -23,7 +23,7 @@ export default function PicGarden() {
   }
 
   const handleThread = () => {
-    if (!threadUp) setThread(!threadUp);
+    setThread(false);
   }
 
   return (
