@@ -36,3 +36,8 @@
 .interactive:focus {
   outline: none;
 }
+
+.inventory {
+  display: grid;
+  grid-template-columns: 10% 10% 10% 10% 10% 10%;
+}
