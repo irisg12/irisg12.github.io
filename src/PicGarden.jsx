@@ -44,8 +44,8 @@ export default function PicGarden() {
                 transform: `${plantUp? "rotate(-10deg) translate(-10%, -14%)": ""}`,
                 transition: "transform .4s",
                 transitionTimingFunction: "ease"
-              }}>
-            </button>
+              }}
+            />
             {!threadUp && <button className="interactive" onClick={handleThread} 
               style={{
                 width: `${widths["thread"] * SF}%`,
@@ -53,8 +53,8 @@ export default function PicGarden() {
                 left: "15%",
                 top: "77%",
                 backgroundImage: `url(${thread})`
-              }}>
-            </button>}
+              }}
+            />}
         </div>
     </>
   )
