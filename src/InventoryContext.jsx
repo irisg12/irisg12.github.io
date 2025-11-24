@@ -4,6 +4,7 @@ const InventoryContext = createContext();
 
 export function InventoryProvider({ children }) {
   const [inventory, setInventory] = useState(new Array(6).fill(""));
+  const [activeItem, setActiveItem] = useState(0);
 
   function addItem(item) {
     const empty = inventory.indexOf("");
@@ -26,7 +27,7 @@ export function InventoryProvider({ children }) {
   }
 
   return (
-    <InventoryContext.Provider value={{ inventory, setInventory, addItem, removeItem }}>
+    <InventoryContext.Provider value={{ inventory, setInventory, addItem, removeItem, activeItem, setActiveItem }}>
       {children}
     </InventoryContext.Provider>
   );

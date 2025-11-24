@@ -63,3 +63,12 @@
   border-radius: 0px;
   padding: 0px;
 }
+
+.inventory-item.selected {
+  background-color: orchid;
+  border-radius: 0px;
+}
+
+.inventory-item:focus {
+  outline: none;
+}
