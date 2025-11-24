@@ -1,8 +1,12 @@
 import "./main.css"
 import { useInventory } from "./InventoryContext";
 
+import canOpener from "./assets/can_opener.png"
+import sardines from "./assets/sardines.png"
+import openSardines from "./assets/sardines.png"
+
 export default function Inventory() {
-  const { inventory, activeItem, setActiveItem } = useInventory();
+  const { inventory, addItem, removeItem, activeItem, setActiveItem, checkMatch } = useInventory();
   return (
     <div className="inventory">
       {inventory.map((item, index) => (
@@ -10,6 +14,14 @@ export default function Inventory() {
         style={{
           backgroundImage: `url(${item})`}}
         onClick={() => {
+          //TODO: consider changing mechanics
+          if (checkMatch(canOpener) && item === sardines) {
+            removeItem(sardines);
+            addItem(openSardines);
+            removeItem(canOpener);
+            setActiveItem(-1);
+            return;
+          }
           if (activeItem == index) setActiveItem(-1);
           else setActiveItem(index)
         }}/>

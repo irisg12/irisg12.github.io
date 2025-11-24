@@ -7,6 +7,7 @@ import './main.css'
 
 import kitchen from "./assets/room_kitchen.png"
 import batter from "./assets/batter.png"
+import bread from "./assets/batter.png"
 import canOpener from "./assets/can_opener.png"
 import drawer from "./assets/drawer.png"
 import openDrawer from "./assets/drawer_open.png"
@@ -14,9 +15,11 @@ import sardines from "./assets/sardines.png"
 import waterCan from "./assets/water_can.png"
 import fridgeDoor from "./assets/fridge_door.png"
 import fridgeHandle from "./assets/fridge_handle.png"
+import button from "./assets/wheel.png"
 
 const images = [
   { id: "batter", src: batter },
+  { id: "bread", src: bread },
   { id: "canOpener", src: canOpener },
   { id: "drawer", src: drawer },
   { id: "openDrawer", src: openDrawer},
@@ -24,15 +27,19 @@ const images = [
   { id: "waterCan", src: waterCan },
   { id: "fridgeDoor", src: fridgeDoor },
   { id: "fridgeHandle", src: fridgeHandle },
+  { id: "button", src: button }
 ];
 
 export default function ProjectsFun() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem } = useInventory();
+  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
   const [doorOpen, setDoor] = useState(false);
-  const [batterPlaced, setBatter] = useState(true);
+  const [batterUp, setBatter] = useState(false);
+  const [batterPlaced, setBatterPlaced] = useState(false);
+  const [baked, setBaked] = useState(false);
   const [canOpenerUp, setCanOpener] = useState(false);
   const [drawerOpen, setDrawer] = useState(false);
+  const [ovenOpen, setOven] = useState(false);
   const [sardinesUp, setSardines] = useState(false);
   const [waterCanUp, setWaterCan] = useState(false);
   const SF = .042;
@@ -41,9 +48,12 @@ export default function ProjectsFun() {
     setDoor(!doorOpen);
   }
 
+  //TODO: fix logic/clean 
   const handleBatter = () => {
-    setBatter(false);
-    addItem(batter);
+    if (!batterUp) setBatter(true);
+    if (batterPlaced) setBatterPlaced(false);
+    if (baked) addItem(bread);
+    else addItem(batter);
   }
 
   const handleCanOpener = () => {
@@ -53,6 +63,14 @@ export default function ProjectsFun() {
 
   const toggleDrawer = () => {
     setDrawer(!drawerOpen);
+  }
+
+  const toggleOven = () => {
+    if (ovenOpen && checkMatch(batter)) {
+      setBatterPlaced(true);
+      removeItem(batter);
+      setActiveItem(-1);
+    } else setOven(!ovenOpen);
   }
 
   const handleSardines = () => {
@@ -65,6 +83,14 @@ export default function ProjectsFun() {
     addItem(waterCan);
   }
 
+  //TODO: place watercan under sink
+
+  const handleOvenButton = () => {
+    if (batterPlaced && !ovenOpen) {
+      setBaked(true);
+    }
+  }
+
   return (
     <>
       <h1> Personal Projects (not engineering)</h1>
@@ -72,7 +98,7 @@ export default function ProjectsFun() {
       <div className="room-container" style={{backgroundImage: `url(${kitchen})`}}>
         <Link to="/pic-garden" className="nav-button">&lt;</Link>
         <br />
-        <Link to="/about" className="nav-button">Leave?</Link>
+        <Link to="/about" className="interactive">Leave?</Link>
         <br />
         <Link to="/projects" className="nav-button">&gt;</Link>
         <button className="interactive" onClick={toggleDoor} 
@@ -93,7 +119,7 @@ export default function ProjectsFun() {
             backgroundImage: `url(${drawerOpen? openDrawer: drawer})`
           }}
         />
-        {doorOpen && batterPlaced && <button className="interactive" onClick={handleBatter}
+        {doorOpen && !batterUp && <button className="interactive" onClick={handleBatter}
           style={{
             width: `${widths["batter"] * SF}%`,
             aspectRatio: `${widths["batter"] / heights["batter"]}`,
@@ -129,6 +155,33 @@ export default function ProjectsFun() {
             left: "57%",
             top: "10%",
             backgroundImage: `url(${waterCan})`
+          }}
+        />}
+        <button className="interactive" onClick={toggleOven}
+          style={{
+            width: `${ovenOpen ? widths["openDrawer"] * SF : widths["drawer"] * SF}%`,
+            aspectRatio: `${ovenOpen ? widths["openDrawer"] / heights["openDrawer"] : widths["drawer"] / heights["drawer"]}`,
+            left: "61%",
+            top: "66%",
+            backgroundImage: `url(${ovenOpen? openDrawer: drawer})`
+          }}
+        />
+        <button className="interactive" onClick={handleOvenButton} 
+          style={{
+            width: `${widths["button"] * SF *1.3}%`,
+            aspectRatio: widths["button"] / heights["button"],
+            left: "55%",
+            top: "53%",
+            backgroundImage: `url(${button})`
+          }}>
+        </button>
+        {ovenOpen && batterPlaced && <button className="interactive" onClick={handleBatter}
+          style={{
+            width: `${baked? widths["bread"] * SF : widths["batter"] * SF}%`,
+            aspectRatio: `${baked ? widths["bread"] / heights["bread"] : widths["batter"] / heights["batter"]}`,
+            left: "65%",
+            top: "70%",
+            backgroundImage: `url(${baked? bread : batter})`
           }}
         />}
         <Inventory/>

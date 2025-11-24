@@ -11,23 +11,34 @@ import curtainsUp from "./assets/curtains_up.png";
 import rug from "./assets/rug.png";
 import rugUp from "./assets/rug_up.png";
 import seeds from "./assets/seeds.png";
+import waterCan from "./assets/water_can.png";
 
 const images = [
   {id: "curtains", src: curtains},
   {id: "curtainsUp", src: curtainsUp},
   {id: "rug", src: rug},
   {id: "rugUp", src: rugUp},
-  {id: "seeds", src: seeds}
+  {id: "seeds", src: seeds},
+  {id: "waterCan", src: waterCan}
 ]
+
+/* ~~~ notes ~~~
+- it needs to feel more integrated with the website and also more cozy
+- paper crumple effect pop ups 
+- background animations? 
+- pencil texture lines 
+*/
 
 export default function About() {
   const [curtainsOpen, setCurtains] = useState(false);
   const [rugFlipped, setRug] = useState(false);
   const [seedsUp, setSeeds] = useState(false);
+  const [planted, setPlanted] = useState(false);
+  const [grown, setGrown] = useState(false);
   const SF = .042;
 
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem } = useInventory();
+  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
 
   const toggleCurtains = () => {
     setCurtains(!curtainsOpen);
@@ -40,6 +51,19 @@ export default function About() {
   const handleSeeds = () => {
     setSeeds(true);
     addItem(seeds);
+  }
+
+  const handlePlant = () => {
+    if (checkMatch(seeds)) {
+      setPlanted(true);
+      removeItem(seeds);
+      setActiveItem(-1);
+    }
+    if (checkMatch(waterCan) && planted) {
+      setGrown(true);
+      removeItem(waterCan);
+      setActiveItem(-1);
+    }
   }
 
   return (
@@ -83,6 +107,15 @@ export default function About() {
           left: "72%",
           top: "85%",
           backgroundImage: `url(${seeds})`
+        }}>
+        </button>}
+        {curtainsOpen && <button className="interactive" onClick={handlePlant} 
+        style={{
+          width: `${grown ? widths["rugUp"] * SF * .3 : widths["rug"] * SF * .3}%`,
+          aspectRatio: `${grown ? widths["rugUp"] / heights["rugUp"] : widths["rug"] / heights["rug"]}`,
+          left: "22%",
+          top: `${grown ? 43:43}%`,
+          backgroundImage: `url(${grown? rugUp: rug})`
         }}>
         </button>}
         <Inventory/>
