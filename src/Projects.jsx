@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import useImageDimensions from "./useImageDims";
 import { useEffect, useState } from "react";
 import Inventory from "./Inventory";
+import { useInventory } from "./InventoryContext";
 import './main.css'
 
 import workRoom from './assets/room_work.png'
@@ -20,6 +21,7 @@ const images = [
 //TODO: handle invalid aspect ratio calcs before images load
 export default function Projects() {
   const { widths, heights } = useImageDimensions(images);
+  const { addItem, removeItem } = useInventory();
   const [wheelPlaced , setWheel] = useState(false);
   const [letterUp , setLetter] = useState(false);
   const [starUp , setStar] = useState(true);
@@ -34,11 +36,13 @@ export default function Projects() {
     if (buttonPlaced && !starUp){
       setStar(true);
       setStarDone(true);
+      addItem(star);
     }
   }
 
   const handleLetter = () => {
     setLetter(true);
+    addItem(letter);
   }
 
   const handleWheel = () => {

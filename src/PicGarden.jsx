@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useImageDimensions from "./useImageDims";
 import Inventory from "./Inventory";
+import { useInventory } from "./InventoryContext";
 import './main.css'
 
 import livingRoom from "./assets/room_living.png"
@@ -17,6 +18,7 @@ export default function PicGarden() {
   const [plantUp, setPlant] = useState(false);
   const [threadUp, setThread] = useState(false);
   const { widths, heights } = useImageDimensions(images);
+  const { addItem, removeItem } = useInventory();
   const SF = .042;
 
   const togglePlant = () => {
@@ -25,6 +27,7 @@ export default function PicGarden() {
 
   const handleThread = () => {
     setThread(true);
+    addItem(thread);
   }
 
   return (

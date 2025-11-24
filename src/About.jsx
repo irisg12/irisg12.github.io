@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react"
 import useImageDimensions from "./useImageDims";
+import { useInventory } from "./InventoryContext";
 import Inventory from "./Inventory";
 import './main.css';
 
@@ -26,6 +27,7 @@ export default function About() {
   const SF = .042;
 
   const { widths, heights } = useImageDimensions(images);
+  const { addItem, removeItem } = useInventory();
 
   const toggleCurtains = () => {
     setCurtains(!curtainsOpen);
@@ -37,6 +39,7 @@ export default function About() {
 
   const handleSeeds = () => {
     setSeeds(true);
+    addItem(seeds);
   }
 
   return (

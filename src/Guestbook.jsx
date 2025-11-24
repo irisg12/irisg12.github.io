@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import useImageDimensions from "./useImageDims";
 import {useEffect, useState} from "react";
 import Inventory from "./Inventory";
+import { useInventory } from "./InventoryContext";
 import './main.css'
 
 import garden from "./assets/garden.png"
@@ -19,6 +20,7 @@ const images = [
 
 export default function Guestbook() {
   const { widths, heights } = useImageDimensions(images);
+  const { addItem, removeItem } = useInventory();
   const [flagUp, setFlag] = useState(false);
   const [doorOpen, setDoor] = useState(false);
   const [mailPlaced, setMail] = useState(false);

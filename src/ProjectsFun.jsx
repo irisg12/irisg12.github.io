@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useImageDimensions from "./useImageDims";
 import Inventory from "./Inventory";
+import { useInventory } from "./InventoryContext";
 import './main.css'
 
 import kitchen from "./assets/room_kitchen.png"
@@ -27,6 +28,7 @@ const images = [
 
 export default function ProjectsFun() {
   const { widths, heights } = useImageDimensions(images);
+  const { addItem, removeItem } = useInventory();
   const [doorOpen, setDoor] = useState(false);
   const [batterPlaced, setBatter] = useState(true);
   const [canOpenerUp, setCanOpener] = useState(false);
@@ -41,10 +43,12 @@ export default function ProjectsFun() {
 
   const handleBatter = () => {
     setBatter(false);
+    addItem(batter);
   }
 
   const handleCanOpener = () => {
     setCanOpener(true);
+    addItem(canOpener);
   }
 
   const toggleDrawer = () => {
@@ -53,10 +57,12 @@ export default function ProjectsFun() {
 
   const handleSardines = () => {
     setSardines(true);
+    addItem(sardines);
   }
 
   const handleWaterCan = () => {
     setWaterCan(true);
+    addItem(waterCan);
   }
 
   return (
