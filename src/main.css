@@ -38,6 +38,24 @@
 }
 
 .inventory {
+  position: absolute;
   display: grid;
-  grid-template-columns: 10% 10% 10% 10% 10% 10%;
+  width: 45%;
+  aspect-ratio: 6;
+  bottom: 0%;
+  left: 50%;
+  transform: translateX(-50%);
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  z-index: 5;
+  background-color: #000;
+  padding-left: .5%;
+  padding-right: .5%;
+  padding-top: .25%;
+  padding-bottom: .25%;
+}
+
+.inventory-item {
+  background-color: #fff;
+  margin: 5%;
+  border-radius: 0px;
 }

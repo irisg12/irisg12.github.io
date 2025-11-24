@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useImageDimensions from "./useImageDims";
+import Inventory from "./Inventory";
 import './main.css'
 
 import kitchen from "./assets/room_kitchen.png"
@@ -61,70 +62,71 @@ export default function ProjectsFun() {
   return (
     <>
       <h1> Personal Projects (not engineering)</h1>
-        <p> kitchen </p>
-        <div className="room-container" style={{backgroundImage: `url(${kitchen})`}}>
-            <Link to="/pic-garden" className="nav-button">&lt;</Link>
-            <br />
-            <Link to="/about" className="nav-button">Leave?</Link>
-            <br />
-            <Link to="/projects" className="nav-button">&gt;</Link>
-            <button className="interactive" onClick={toggleDoor} 
-              style={{
-                width: `${doorOpen ? widths["fridgeDoor"] * SF : widths["fridgeHandle"] * SF}%`,
-                aspectRatio: `${doorOpen ? widths["fridgeDoor"] / heights["fridgeDoor"] : widths["fridgeHandle"] / heights["fridgeHandle"]}`,
-                left: `${doorOpen ? 21 : 36}%`,
-                top: "52%",
-                backgroundImage: `url(${doorOpen ? fridgeDoor : fridgeHandle})`
-              }}
-            />
-            <button className="interactive" onClick={toggleDrawer}
-              style={{
-                width: `${drawerOpen ? widths["openDrawer"] * SF : widths["drawer"] * SF}%`,
-                aspectRatio: `${drawerOpen ? widths["openDrawer"] / heights["openDrawer"] : widths["drawer"] / heights["drawer"]}`,
-                left: "43%",
-                top: "66%",
-                backgroundImage: `url(${drawerOpen? openDrawer: drawer})`
-              }}
-            />
-            {doorOpen && batterPlaced && <button className="interactive" onClick={handleBatter}
-              style={{
-                width: `${widths["batter"] * SF}%`,
-                aspectRatio: `${widths["batter"] / heights["batter"]}`,
-                left: "28%",     
-                top: "67%",
-                backgroundImage: `url(${batter})`
-              }}
-            />}
-            {drawerOpen && !canOpenerUp && 
-            <button className="interactive" onClick={handleCanOpener}
-              style={{
-                width: `${widths["canOpener"] * SF}%`,
-                aspectRatio: `${widths["canOpener"] / heights["canOpener"]}`,
-                left: "45%",
-                top: "68%",
-                backgroundImage: `url(${canOpener})`
-              }}
-            />}
-            {doorOpen && !sardinesUp && 
-            <button className="interactive" onClick={handleSardines}
-              style={{
-                width: `${widths["sardines"] * SF}%`,
-                aspectRatio: `${widths["sardines"] / heights["sardines"]}`,
-                left: "27%",
-                top: "55%",
-                backgroundImage: `url(${sardines})`
-              }}
-            />}
-            {!waterCanUp && <button className="interactive" onClick={handleWaterCan}
-              style={{
-                width: `${widths["waterCan"] * SF}%`,
-                aspectRatio: `${widths["waterCan"] / heights["waterCan"]}`,
-                left: "57%",
-                top: "10%",
-                backgroundImage: `url(${waterCan})`
-              }}
-            />}
-        </div>
+      <p> kitchen </p>
+      <div className="room-container" style={{backgroundImage: `url(${kitchen})`}}>
+        <Link to="/pic-garden" className="nav-button">&lt;</Link>
+        <br />
+        <Link to="/about" className="nav-button">Leave?</Link>
+        <br />
+        <Link to="/projects" className="nav-button">&gt;</Link>
+        <button className="interactive" onClick={toggleDoor} 
+          style={{
+            width: `${doorOpen ? widths["fridgeDoor"] * SF : widths["fridgeHandle"] * SF}%`,
+            aspectRatio: `${doorOpen ? widths["fridgeDoor"] / heights["fridgeDoor"] : widths["fridgeHandle"] / heights["fridgeHandle"]}`,
+            left: `${doorOpen ? 21 : 36}%`,
+            top: "52%",
+            backgroundImage: `url(${doorOpen ? fridgeDoor : fridgeHandle})`
+          }}
+        />
+        <button className="interactive" onClick={toggleDrawer}
+          style={{
+            width: `${drawerOpen ? widths["openDrawer"] * SF : widths["drawer"] * SF}%`,
+            aspectRatio: `${drawerOpen ? widths["openDrawer"] / heights["openDrawer"] : widths["drawer"] / heights["drawer"]}`,
+            left: "43%",
+            top: "66%",
+            backgroundImage: `url(${drawerOpen? openDrawer: drawer})`
+          }}
+        />
+        {doorOpen && batterPlaced && <button className="interactive" onClick={handleBatter}
+          style={{
+            width: `${widths["batter"] * SF}%`,
+            aspectRatio: `${widths["batter"] / heights["batter"]}`,
+            left: "28%",     
+            top: "67%",
+            backgroundImage: `url(${batter})`
+          }}
+        />}
+        {drawerOpen && !canOpenerUp && 
+        <button className="interactive" onClick={handleCanOpener}
+          style={{
+            width: `${widths["canOpener"] * SF}%`,
+            aspectRatio: `${widths["canOpener"] / heights["canOpener"]}`,
+            left: "45%",
+            top: "68%",
+            backgroundImage: `url(${canOpener})`
+          }}
+        />}
+        {doorOpen && !sardinesUp && 
+        <button className="interactive" onClick={handleSardines}
+          style={{
+            width: `${widths["sardines"] * SF}%`,
+            aspectRatio: `${widths["sardines"] / heights["sardines"]}`,
+            left: "27%",
+            top: "55%",
+            backgroundImage: `url(${sardines})`
+          }}
+        />}
+        {!waterCanUp && <button className="interactive" onClick={handleWaterCan}
+          style={{
+            width: `${widths["waterCan"] * SF}%`,
+            aspectRatio: `${widths["waterCan"] / heights["waterCan"]}`,
+            left: "57%",
+            top: "10%",
+            backgroundImage: `url(${waterCan})`
+          }}
+        />}
+        <Inventory/>
+      </div>
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react"
 import useImageDimensions from "./useImageDims";
+import Inventory from "./Inventory";
 import './main.css';
 
 import sideRoom from "./assets/room_side.png";
@@ -81,6 +82,7 @@ export default function About() {
           backgroundImage: `url(${seeds})`
         }}>
         </button>}
+        <Inventory/>
       </div>
     </>
   )
