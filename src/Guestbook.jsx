@@ -20,7 +20,7 @@ const images = [
 
 export default function Guestbook() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem } = useInventory();
+  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
   const [flagUp, setFlag] = useState(false);
   const [doorOpen, setDoor] = useState(false);
   const [mailPlaced, setMail] = useState(false);
@@ -44,13 +44,18 @@ export default function Guestbook() {
       toggleDoor();
       return;
     }
-    if (doorOpen) setMail(true);
+    if (doorOpen && checkMatch(letter)) {
+      setMail(true);
+      removeItem(letter);
+      setActiveItem(-1);
+    }
     else toggleDoor();
     // TODO: consider fixing and making box clickable to close door
   }
 
   const handleStar = () => {
     setStar(true);
+    addItem(star);
   }
 
   return (

@@ -21,7 +21,7 @@ const images = [
 //TODO: handle invalid aspect ratio calcs before images load
 export default function Projects() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem } = useInventory();
+  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
   const [wheelPlaced , setWheel] = useState(false);
   const [letterUp , setLetter] = useState(false);
   const [starUp , setStar] = useState(true);
@@ -53,7 +53,11 @@ export default function Projects() {
   }
 
   const handleThread = () => {
-    setThread(true);
+    if (checkMatch(thread)){
+      setThread(true);
+      removeItem(thread);
+      setActiveItem(-1);
+    }
   }
 
   const handleButton = () => {
