@@ -34,6 +34,11 @@
   padding: 0px;
 }
 
+.interactive:hover {
+  border: 0px;
+  transform: none;
+}
+
 .interactive:focus {
   outline: none;
 }

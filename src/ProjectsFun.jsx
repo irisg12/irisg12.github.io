@@ -32,16 +32,11 @@ const images = [
 
 export default function ProjectsFun() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
+  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { batterUp, batterPlaced, baked, canOpenerUp, sardinesUp, waterCanUp } = puzzleStates;
   const [doorOpen, setDoor] = useState(false);
-  const [batterUp, setBatter] = useState(false);
-  const [batterPlaced, setBatterPlaced] = useState(false);
-  const [baked, setBaked] = useState(false);
-  const [canOpenerUp, setCanOpener] = useState(false);
   const [drawerOpen, setDrawer] = useState(false);
   const [ovenOpen, setOven] = useState(false);
-  const [sardinesUp, setSardines] = useState(false);
-  const [waterCanUp, setWaterCan] = useState(false);
   const SF = .042;
 
   const toggleDoor = () => {
@@ -50,14 +45,14 @@ export default function ProjectsFun() {
 
   //TODO: fix logic/clean 
   const handleBatter = () => {
-    if (!batterUp) setBatter(true);
-    if (batterPlaced) setBatterPlaced(false);
+    if (!batterUp) updatePuzzleState('batterUp', true);
+    if (batterPlaced) updatePuzzleState('batterPlaced', false);
     if (baked) addItem(bread);
     else addItem(batter);
   }
 
   const handleCanOpener = () => {
-    setCanOpener(true);
+    updatePuzzleState('canOpenerUp', true);
     addItem(canOpener);
   }
 
@@ -67,19 +62,19 @@ export default function ProjectsFun() {
 
   const toggleOven = () => {
     if (ovenOpen && checkMatch(batter)) {
-      setBatterPlaced(true);
+      updatePuzzleState('batterPlaced', true);
       removeItem(batter);
       setActiveItem(-1);
     } else setOven(!ovenOpen);
   }
 
   const handleSardines = () => {
-    setSardines(true);
+    updatePuzzleState('sardinesUp', true);
     addItem(sardines);
   }
 
   const handleWaterCan = () => {
-    setWaterCan(true);
+    updatePuzzleState('waterCanUp', true);
     addItem(waterCan);
   }
 
@@ -87,7 +82,7 @@ export default function ProjectsFun() {
 
   const handleOvenButton = () => {
     if (batterPlaced && !ovenOpen) {
-      setBaked(true);
+      updatePuzzleState('baked', true);
     }
   }
 

@@ -20,10 +20,10 @@ const images = [
 
 export default function Guestbook() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
+  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { mailPlaced } = puzzleStates;
   const [flagUp, setFlag] = useState(false);
   const [doorOpen, setDoor] = useState(false);
-  const [mailPlaced, setMail] = useState(false);
   const [starUp , setStar] = useState(true);
   //TODO get rid of starDone once inventory is implemented
   const [starDone , setStarDone] = useState(false);
@@ -39,13 +39,13 @@ export default function Guestbook() {
 
   const handleMail = () => {
     if (flagUp && mailPlaced) {
-      setMail(false);
+      updatePuzzleState('mailPlaced', false);
       setStar(false);
       toggleDoor();
       return;
     }
     if (doorOpen && checkMatch(letter)) {
-      setMail(true);
+      updatePuzzleState('mailPlaced', true);
       removeItem(letter);
       setActiveItem(-1);
     }

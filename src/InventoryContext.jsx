@@ -5,6 +5,30 @@ const InventoryContext = createContext();
 export function InventoryProvider({ children }) {
   const [inventory, setInventory] = useState(new Array(6).fill(""));
   const [activeItem, setActiveItem] = useState(-1);
+  const [puzzleStates, setPuzzleStates] = useState({
+    // About states
+    seedsUp: false,
+    planted: false,
+    grown: false,
+    // Pic garden states
+    threadUp: false,
+    // Personal project states
+    batterUp: false,
+    batterPlaced: false,
+    baked: false,
+    canOpenerUp: false,
+    sardinesUp: false,
+    waterCanUp: false,
+    // Project states
+    wheelPlaced: false,
+    letterUp: false,
+    starUp: true,
+    buttonPlaced: false,
+    threadPlaced: false,
+    // Guestbook states
+    mailPlaced: false,
+    starUp: true
+  })
 
   function addItem(item) {
     const empty = inventory.indexOf("");
@@ -30,8 +54,12 @@ export function InventoryProvider({ children }) {
     return inventory[activeItem] === item;
   }
 
+  function updatePuzzleState(key, value) {
+    setPuzzleStates(prev => ({ ...prev, [key]: value }));
+  }
+
   return (
-    <InventoryContext.Provider value={{ inventory, setInventory, addItem, removeItem, activeItem, setActiveItem, checkMatch }}>
+    <InventoryContext.Provider value={{ inventory, setInventory, addItem, removeItem, activeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState }}>
       {children}
     </InventoryContext.Provider>
   );

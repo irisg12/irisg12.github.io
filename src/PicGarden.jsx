@@ -16,9 +16,9 @@ const images = [
 
 export default function PicGarden() {
   const [plantUp, setPlant] = useState(false);
-  const [threadUp, setThread] = useState(false);
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem } = useInventory();
+  const { addItem, removeItem, puzzleStates, updatePuzzleState } = useInventory();
+  const { threadUp } = puzzleStates;
   const SF = .042;
 
   const togglePlant = () => {
@@ -26,7 +26,7 @@ export default function PicGarden() {
   }
 
   const handleThread = () => {
-    setThread(true);
+    updatePuzzleState('threadUp', true);
     addItem(thread);
   }
 

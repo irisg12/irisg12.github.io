@@ -32,13 +32,11 @@ const images = [
 export default function About() {
   const [curtainsOpen, setCurtains] = useState(false);
   const [rugFlipped, setRug] = useState(false);
-  const [seedsUp, setSeeds] = useState(false);
-  const [planted, setPlanted] = useState(false);
-  const [grown, setGrown] = useState(false);
   const SF = .042;
 
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
+  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { seedsUp, planted, grown } = puzzleStates;
 
   const toggleCurtains = () => {
     setCurtains(!curtainsOpen);
@@ -49,18 +47,18 @@ export default function About() {
   }
 
   const handleSeeds = () => {
-    setSeeds(true);
+    updatePuzzleState('seedsUp', true);
     addItem(seeds);
   }
 
   const handlePlant = () => {
     if (checkMatch(seeds)) {
-      setPlanted(true);
+      updatePuzzleState('planted', true);
       removeItem(seeds);
       setActiveItem(-1);
     }
     if (checkMatch(waterCan) && planted) {
-      setGrown(true);
+      updatePuzzleState('grown', true);
       removeItem(waterCan);
       setActiveItem(-1);
     }

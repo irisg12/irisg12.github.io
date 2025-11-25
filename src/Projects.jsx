@@ -21,32 +21,28 @@ const images = [
 //TODO: handle invalid aspect ratio calcs before images load
 export default function Projects() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch } = useInventory();
-  const [wheelPlaced , setWheel] = useState(false);
-  const [letterUp , setLetter] = useState(false);
-  const [starUp , setStar] = useState(true);
+  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { wheelPlaced, letterUp, starUp, buttonPlaced, threadPlaced } = puzzleStates;
   const [starDone , setStarDone] = useState(false);
-  const [buttonPlaced, setButton] = useState(false);
-  const [threadPlaced, setThread] = useState(false);
   const [skateboardUp, setSkateboard] = useState(false);
   const SF = .042;
 
   const handleStar = () => {
-    if (buttonPlaced && !starDone) setStar(false);
+    if (buttonPlaced && !starDone) updatePuzzleState('starUp', false);
     if (buttonPlaced && !starUp){
-      setStar(true);
+      updatePuzzleState('starUp', true);
       setStarDone(true);
       addItem(star);
     }
   }
 
   const handleLetter = () => {
-    setLetter(true);
+    updatePuzzleState('letterUp', true);
     addItem(letter);
   }
 
   const handleWheel = () => {
-    setWheel(true);
+    updatePuzzleState('wheelPlaced', true);
     if (wheelPlaced) {
       setSkateboard(!skateboardUp);
     }
@@ -54,14 +50,14 @@ export default function Projects() {
 
   const handleThread = () => {
     if (checkMatch(thread)){
-      setThread(true);
+      updatePuzzleState('threadPlaced', true);
       removeItem(thread);
       setActiveItem(-1);
     }
   }
 
   const handleButton = () => {
-    setButton(true);
+    updatePuzzleState('buttonPlaced', true);
   }
 
   return (
