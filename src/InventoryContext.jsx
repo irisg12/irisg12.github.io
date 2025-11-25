@@ -27,7 +27,7 @@ export function InventoryProvider({ children }) {
     threadPlaced: false,
     // Guestbook states
     mailPlaced: false,
-    starUp: true
+    star2Up: true
   })
 
   function addItem(item) {

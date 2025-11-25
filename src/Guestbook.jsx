@@ -21,12 +21,10 @@ const images = [
 export default function Guestbook() {
   const { widths, heights } = useImageDimensions(images);
   const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
-  const { mailPlaced } = puzzleStates;
+  const { mailPlaced, star2Up } = puzzleStates;
   const [flagUp, setFlag] = useState(false);
   const [doorOpen, setDoor] = useState(false);
-  const [starUp , setStar] = useState(true);
   //TODO get rid of starDone once inventory is implemented
-  const [starDone , setStarDone] = useState(false);
   const SF = .042;
 
   const toggleFlag = () => {
@@ -38,9 +36,10 @@ export default function Guestbook() {
   }
 
   const handleMail = () => {
+    console.log(flagUp, mailPlaced, star2Up)
     if (flagUp && mailPlaced) {
       updatePuzzleState('mailPlaced', false);
-      setStar(false);
+      updatePuzzleState('star2Up', false);
       toggleDoor();
       return;
     }
@@ -54,7 +53,7 @@ export default function Guestbook() {
   }
 
   const handleStar = () => {
-    setStar(true);
+    updatePuzzleState('star2Up', true);
     addItem(star);
   }
 
@@ -107,7 +106,7 @@ export default function Guestbook() {
             backgroundImage: `url(${letter})`,
           }}
         />}
-        {doorOpen && !starUp && <button className="interactive" onClick={handleStar}
+        {doorOpen && !star2Up && <button className="interactive" onClick={handleStar}
           style={{
             width: `${widths["star"] * SF}%`,
             aspectRatio: `${widths["star"] / heights["star"]}`,
