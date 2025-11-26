@@ -12,6 +12,7 @@ export function InventoryProvider({ children }) {
     grown: false,
     // Pic garden states
     threadUp: false,
+    wheelUp: false, 
     // Personal project states
     batterUp: false,
     batterPlaced: false,
@@ -47,6 +48,7 @@ export function InventoryProvider({ children }) {
       const newInventory = [...inventory];
       newInventory[index] = "";
       setInventory(newInventory);
+      setActiveItem(-1);
     }
   }
 

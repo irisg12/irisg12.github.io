@@ -27,6 +27,7 @@ const images = [
 - paper crumple effect pop ups 
 - background animations? 
 - pencil texture lines 
+- arrow/speech bubble for hover for subpage links 
 */
 
 export default function About() {
@@ -35,7 +36,7 @@ export default function About() {
   const SF = .042;
 
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { addItem, removeItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
   const { seedsUp, planted, grown } = puzzleStates;
 
   const toggleCurtains = () => {
@@ -55,12 +56,10 @@ export default function About() {
     if (checkMatch(seeds)) {
       updatePuzzleState('planted', true);
       removeItem(seeds);
-      setActiveItem(-1);
     }
     if (checkMatch(waterCan) && planted) {
       updatePuzzleState('grown', true);
       removeItem(waterCan);
-      setActiveItem(-1);
     }
   }
 

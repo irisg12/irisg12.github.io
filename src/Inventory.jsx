@@ -19,7 +19,6 @@ export default function Inventory() {
             removeItem(sardines);
             addItem(openSardines);
             removeItem(canOpener);
-            setActiveItem(-1);
             return;
           }
           if (activeItem == index) setActiveItem(-1);

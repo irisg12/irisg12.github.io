@@ -8,17 +8,20 @@ import './main.css'
 import livingRoom from "./assets/room_living.png"
 import plant from "./assets/plant.png"
 import thread from "./assets/thread.png"
+import wheel from "./assets/wheel.png"
 
 const images = [
   {id: "plant", src: plant}, 
-  {id: "thread", src: thread}
+  {id: "thread", src: thread},
+  {id: "wheel", src: wheel}
 ]
 
 export default function PicGarden() {
   const [plantUp, setPlant] = useState(false);
+  const [photoOpen, setPhoto] = useState(false);
   const { widths, heights } = useImageDimensions(images);
   const { addItem, removeItem, puzzleStates, updatePuzzleState } = useInventory();
-  const { threadUp } = puzzleStates;
+  const { threadUp, wheelUp } = puzzleStates;
   const SF = .042;
 
   const togglePlant = () => {
@@ -28,6 +31,15 @@ export default function PicGarden() {
   const handleThread = () => {
     updatePuzzleState('threadUp', true);
     addItem(thread);
+  }
+
+  const togglePhoto = () => {
+    setPhoto(!photoOpen);
+  }
+
+  const handleWheel = () => {
+    updatePuzzleState('wheelUp', true);
+    addItem(wheel);
   }
 
   return (
@@ -59,6 +71,25 @@ export default function PicGarden() {
               backgroundImage: `url(${thread})`
             }}
           />}
+          <button className="interactive" onClick={togglePhoto}
+          style={{
+            width: "4%",
+            aspectRatio: ".66",
+            left: "45%",
+            top: "23%",
+            outline: "1px solid black",
+            perspective: "1px", //TODO: figure out how to make this wrok
+            transform: `${photoOpen? "rotateY(70deg) translateX(-85%)" : ""}`
+          }}/>
+          {photoOpen && !wheelUp && <button className="interactive" onClick={handleWheel} 
+            style={{
+              width: `${widths["wheel"] * SF * 1.6}%`,
+              aspectRatio: widths["wheel"] / heights["wheel"],
+              left: "46.5%",
+              top: "26%",
+              backgroundImage: `url(${wheel})`
+            }}>
+          </button>}
           <Inventory/>
         </div>
     </>

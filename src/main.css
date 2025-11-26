@@ -36,7 +36,6 @@
 
 .interactive:hover {
   border: 0px;
-  transform: none;
 }
 
 .interactive:focus {

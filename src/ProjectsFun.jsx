@@ -32,7 +32,7 @@ const images = [
 
 export default function ProjectsFun() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { addItem, removeItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
   const { batterUp, batterPlaced, baked, canOpenerUp, sardinesUp, waterCanUp } = puzzleStates;
   const [doorOpen, setDoor] = useState(false);
   const [drawerOpen, setDrawer] = useState(false);
@@ -64,7 +64,6 @@ export default function ProjectsFun() {
     if (ovenOpen && checkMatch(batter)) {
       updatePuzzleState('batterPlaced', true);
       removeItem(batter);
-      setActiveItem(-1);
     } else setOven(!ovenOpen);
   }
 

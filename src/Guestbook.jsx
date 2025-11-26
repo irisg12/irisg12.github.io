@@ -20,7 +20,7 @@ const images = [
 
 export default function Guestbook() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { addItem, removeItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
   const { mailPlaced, star2Up } = puzzleStates;
   const [flagUp, setFlag] = useState(false);
   const [doorOpen, setDoor] = useState(false);
@@ -46,7 +46,6 @@ export default function Guestbook() {
     if (doorOpen && checkMatch(letter)) {
       updatePuzzleState('mailPlaced', true);
       removeItem(letter);
-      setActiveItem(-1);
     }
     else toggleDoor();
     // TODO: consider fixing and making box clickable to close door

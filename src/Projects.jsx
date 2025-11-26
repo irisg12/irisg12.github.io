@@ -21,7 +21,7 @@ const images = [
 //TODO: handle invalid aspect ratio calcs before images load
 export default function Projects() {
   const { widths, heights } = useImageDimensions(images);
-  const { addItem, removeItem, setActiveItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
+  const { addItem, removeItem, checkMatch, puzzleStates, updatePuzzleState } = useInventory();
   const { wheelPlaced, letterUp, starUp, buttonPlaced, threadPlaced } = puzzleStates;
   const [starDone , setStarDone] = useState(false);
   const [skateboardUp, setSkateboard] = useState(false);
@@ -42,7 +42,10 @@ export default function Projects() {
   }
 
   const handleWheel = () => {
-    updatePuzzleState('wheelPlaced', true);
+    if (checkMatch(wheel)) {
+      updatePuzzleState('wheelPlaced', true);
+      removeItem(wheel);
+    }
     if (wheelPlaced) {
       setSkateboard(!skateboardUp);
     }
@@ -52,7 +55,6 @@ export default function Projects() {
     if (checkMatch(thread)){
       updatePuzzleState('threadPlaced', true);
       removeItem(thread);
-      setActiveItem(-1);
     }
   }
 
@@ -74,8 +76,7 @@ export default function Projects() {
             aspectRatio: ".66",
             left: "35.5%",
             top: "31%"
-          }}>
-        </button>
+          }}/>
         {!letterUp && <button className="interactive" onClick={handleLetter} 
           style={{
             width: `${widths["letter"] * SF}%`,
@@ -83,8 +84,7 @@ export default function Projects() {
             left: "80%",
             top: "75%",
             backgroundImage: `url(${letter})`
-          }}>
-        </button>}
+          }}/>}
         {!starUp && <button className="interactive" onClick={handleStar} 
           style={{
             width: `${widths["star"] * SF}%`,
@@ -92,8 +92,7 @@ export default function Projects() {
             left: "38%",
             top: "43%",
             backgroundImage: `url(${star})`
-          }}>
-        </button>}
+          }}/>}
         {/*TODO: replace with skateboard button */}
         {wheelPlaced && <button className="interactive" onClick={handleWheel} 
           style={{
